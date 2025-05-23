@@ -44,6 +44,10 @@ export default function MessageInput({ onSend, onCancel, isLoading }: MessageInp
            transition duration-200
            focus:outline-none focus:ring-2 focus:ring-[#623CEA] 
            border border-gray-300 rounded-md"
+            style={{
+              padding: '12px', // 增加内边距
+              lineHeight: '1.8', // 调整行高
+            }}
           />
           <div className="absolute right-3 bottom-3 text-sm text-muted-foreground">
             {isLoading ? '思考中...' : ''}
