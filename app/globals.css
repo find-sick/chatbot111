@@ -41,10 +41,4 @@ button {
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  margin: 0; /* 重置默认margin */
-  padding: 0; /* 重置默认padding */
-}
+

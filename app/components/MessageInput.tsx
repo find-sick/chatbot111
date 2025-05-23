@@ -1,62 +1,65 @@
 'use client';
 import { useState } from 'react';
+import { Button } from './ui/button'; // 根据你的文件结构调整路径
+import { Textarea } from './ui/textarea'; // 同上
+import { Form } from './ui/form'; // 如果需要更复杂的表单处理，可以使用Form组件
 
 interface MessageInputProps {
   onSend: (input: string) => void;
+  onCancel: () => void; // 新增 onCancel 回调函数用于中断请求
   isLoading: boolean;
 }
 
-export default function MessageInput({ onSend, isLoading }: MessageInputProps) {
+export default function MessageInput({ onSend, onCancel, isLoading }: MessageInputProps) {
   const [input, setInput] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (input.trim() && !isLoading) {
-      onSend(input.trim());
-      setInput('');
+  const handleSubmitOrCancel = (e: React.FormEvent | React.MouseEvent) => {
+    e.preventDefault(); // 确保表单不会提交刷新页面
+    if (isLoading) {
+      onCancel(); // 如果正在加载，则尝试中断当前请求
+    } else if (input.trim()) {
+      onSend(input.trim()); // 否则发送消息
+      setInput(''); // 清空输入框
     }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
-      handleSubmit(e);
+      handleSubmitOrCancel(e as unknown as React.FormEvent); // 使用相同的逻辑处理按键事件
     }
   };
 
   return (
-    <div className="w-full flex justify-center">
-      <form onSubmit={handleSubmit} className="flex gap-4 items-end w-full max-w-2xl">
-        <div className="flex-1 relative">
-          <textarea
-            className="w-full border border-gray-200 dark:border-gray-700 rounded-2xl p-4 pr-12 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-white transition-all duration-200"
+    <div className="w-full flex justify-center h-25">
+      <form onSubmit={handleSubmitOrCancel} className="flex gap-5 items-end w-full max-w-2xl">
+        <div className="flex-1 relative" style={{ marginBottom: '20px' }}>
+          <Textarea
             placeholder={isLoading ? "AI正在思考中..." : "  输入消息..."}
-            value={input} 
-            onChange={(e) => setInput(e.target.value)} 
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             disabled={isLoading}
-            rows={1}
-            style={{ 
-              minHeight: '48px',
-              maxHeight: '200px',
-              lineHeight: '1.5'
-            }}
+            className="resize-none min-h-[48px] max-h-[200px] 
+           transition duration-200
+           focus:outline-none focus:ring-2 focus:ring-[#623CEA] 
+           border border-gray-300 rounded-md"
           />
-          <div className="absolute right-3 bottom-3 text-sm text-gray-400">
-            {isLoading ? '思考中...' : '按 Enter 发送，Shift + Enter 换行'}
+          <div className="absolute right-3 bottom-3 text-sm text-muted-foreground">
+            {isLoading ? '思考中...' : ''}
           </div>
         </div>
-        <button 
-          type="submit" 
-          className={`px-6 py-3 rounded-xl bg-blue-500 text-white font-medium transition-all duration-200 ${
-            isLoading 
-              ? 'opacity-50 cursor-not-allowed' 
-              : 'hover:bg-blue-600 active:bg-blue-700'
-          }`}
+        <Button
+          type="submit"
+          onClick={handleSubmitOrCancel}
+          style={{ backgroundColor: '#623CEA', color: 'white', width: '50px', marginBottom: '24px' }}
+          variant={isLoading ? 'secondary' : 'default'}
+          size="lg"
           disabled={isLoading}
+          className={`${isLoading ? 'bg-gray-400' : 'bg-[#623CEA]'}`}
         >
-          {isLoading ? '发送中...' : '发送'}
-        </button>
+          {isLoading ? '取消' : '发送'}
+        </Button>
       </form>
     </div>
   );
