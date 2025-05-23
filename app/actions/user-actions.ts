@@ -10,7 +10,7 @@ export async function signUpWithEmail(email: string, password: string) {
   if (!email || !password) throw new Error('邮箱和密码不能为空');
   
   // 调用 Supabase Auth 注册接口（自动处理密码哈希、邮箱验证邮件发送）
-  const { data, error } = await supabaseServer.auth.signUp({
+  const result = await supabaseServer.auth.signUp({
     email,
     password,
     options: {
@@ -18,8 +18,8 @@ export async function signUpWithEmail(email: string, password: string) {
     },
   });
 
-  if (error) throw error;
-  return { message: '注册成功，请检查邮箱完成验证' };
+  // if (result.error) throw result.error;
+  return result ;
 }
 
 // 邮箱密码登录
