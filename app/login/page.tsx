@@ -36,7 +36,13 @@ export default function LoginPage() {
 
   const handleRegister = async (email: string, password: string) => {
     const result = await signUpWithEmail(email, password);
-    console.log("注册成功", result);
+    if (result) {
+      alert("注册成功");
+      setEmail("");
+      setPassword("");
+    } else {
+      alert("注册失败,请检查邮箱是否已注册");
+    }
   }
 
   return (
