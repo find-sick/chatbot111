@@ -36,6 +36,7 @@ export default function LoginPage() {
 
   const handleRegister = async (email: string, password: string) => {
     const result = await signUpWithEmail(email, password);
+    console.log(111,result)
     if (result.error) {
       alert(result.error);
     } else {
