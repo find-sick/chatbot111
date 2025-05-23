@@ -37,12 +37,12 @@ export default function LoginPage() {
   const handleRegister = async (email: string, password: string) => {
     const result = await signUpWithEmail(email, password);
     console.log(111,result)
-    if (result.error) {
-      alert(result.error);
-    } else {
+    if (result.data.user) {
       alert("注册成功");
       setEmail("");
       setPassword("");
+    } else {
+      alert('注册成功,请查看密码是否大于等于六位数或者已注册');
     }
   }
 
