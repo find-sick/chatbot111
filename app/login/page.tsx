@@ -42,7 +42,7 @@ export default function LoginPage() {
       setEmail("");
       setPassword("");
     } else {
-      alert('注册成功,请查看密码是否大于等于六位数或者已注册');
+      alert('注册失败,请查看密码是否大于等于六位数或者已注册');
     }
   }
 
